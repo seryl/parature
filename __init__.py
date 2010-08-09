@@ -35,10 +35,11 @@ class Parature(object):
         return self.get_item(url)
 
     def PutTicket(self, ticket_data=None):
-        name = None
-        # name = parse ticket id here
+        name = ticket_data['Ticket']['@id']
         url = self._create_url('Ticket', name,
                 use_json=False)
+        self.put_item(url,
+                self.get_xml(ticket_data))
 
     def GetCustomer(self, name=None, page=None):
         url = self._create_url('Customer', name)
