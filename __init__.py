@@ -1,3 +1,6 @@
+# Author: Josh Toft
+# Email: josh@rockyou.com
+#
 import httplib
 
 from jsonxml import JsonXML
