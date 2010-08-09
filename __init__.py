@@ -47,11 +47,11 @@ class Parature(object):
         return self.get_item(url)
 
     def PutCustomer(self, customer_data=None):
-        name = None
-        # name = parse customer id here
+        name = customer_data['Customer']['@id']
         url = self._create_url('Customer', name,
                 use_json=False)
-        put_item(url, customer_data)
+        self.put_item(url,
+                self.get_xml(customer_data))
 
     @staticmethod
     def get_item(url):
@@ -60,13 +60,14 @@ class Parature(object):
 
     @staticmethod
     def put_item(url, data):
+        url = url.replace('&_output_=json', '')
         parsed_url = urlparse(url)
         headers = { 'Content-Type': "text/xml" }
-        conn = httplib.HTTPS(parsed_url.netloc)
-        conn.request("PUT",
-                     parse_url.netloc + \
+        conn = httplib.HTTPSConnection(parsed_url.netloc)
+        conn.request("POST",
+                     parsed_url.netloc + \
                          parsed_url.path + \
-                         '?' + parse_url.query,
+                         '?' + parsed_url.query,
                      data, headers)
         response = conn.getresponse()
         print response.status, response.reason, response.read()
