@@ -58,23 +58,19 @@ class Parature(object):
         return js.data
 
     def put_item(self, url, data):
-        xmlheader = "<?xml version=\"1.0\" ?>\n"
+        headers = {'Content-Type': 'text/xml'}
         parsed_url = urlparse(url)
         data = self.get_xml(data, pretty_print=True)
 
-        conn = httplib.HTTPS(parsed_url.netloc)
+        conn = httplib.HTTPSConnection(parsed_url.netloc)
+        conn.request("PUT",
+                parsed_url.path + '?' + parsed_url.query,
+                data, headers)
 
-        conn.putrequest("PUT", parsed_url.path + '?' + parsed_url.query)
-        conn.putheader("Content-Type", "text/xml")
-        conn.putheader("Content-Length", str(len(xmlheader+data)))
-        conn.endheaders()
-
-        conn.send(xmlheader+data)
-
-        errcode, errmsg, headers = conn.getreply()
-
-        if errcode != 200:
-            print '%s, %s, %s' % (errcode, errmsg, headers)
+        resp = conn.getresponse()
+        if resp.status not in [200, 201]:
+            print resp.status, resp.reason
+            print resp.read()
 
         conn.close()
 
