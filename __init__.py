@@ -3,11 +3,19 @@
 #
 import httplib
 
+from decorator import decorator
 from jsonxml import JsonXML
 from lxml import etree
+from time import sleep
 
 from urllib import urlopen, urlencode
 from urlparse import urlparse
+
+@decorator
+def throttle_requests(func, *args, **kwargs):
+    # limit to 110 req/s
+    sleep(0.0018333333333333333)
+    return func(*args, **kwargs)
 
 class Parature(object):
     def __init__(self, hostname, client_id, dept_id, token):
@@ -53,10 +61,12 @@ class Parature(object):
         self.put_item(url, customer_data)
 
     @staticmethod
+    @throttle_requests
     def get_item(url):
         js = JsonXML(url)
         return js.data
 
+    @throttle_requests
     def put_item(self, url, data):
         headers = {'Content-Type': 'text/xml'}
         parsed_url = urlparse(url)
@@ -82,4 +92,5 @@ class Parature(object):
         else:
             return etree.tostring(
                     self._js.ToXML(data=json_data))
+
 
