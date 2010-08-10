@@ -6,7 +6,7 @@ import httplib
 from jsonxml import JsonXML
 from lxml import etree
 
-from urllib import urlopen
+from urllib import urlopen, urlencode
 from urlparse import urlparse
 
 class Parature(object):
@@ -39,7 +39,7 @@ class Parature(object):
         url = self._create_url('Ticket', name,
                 use_json=False)
         self.put_item(url,
-                self.get_xml(ticket_data))
+                self.get_xml(ticket_data, pretty_print=True))
 
     def GetCustomer(self, name=None, page=None):
         url = self._create_url('Customer', name)
@@ -52,7 +52,7 @@ class Parature(object):
         url = self._create_url('Customer', name,
                 use_json=False)
         self.put_item(url,
-                self.get_xml(customer_data))
+                self.get_xml(customer_data, pretty_print=True))
 
     @staticmethod
     def get_item(url):
@@ -61,17 +61,24 @@ class Parature(object):
 
     @staticmethod
     def put_item(url, data):
+        xmlheader = "<?xml version=\"1.0\" ?>\n"
         url = url.replace('&_output_=json', '')
         parsed_url = urlparse(url)
-        headers = { 'Content-Type': "text/xml" }
-        conn = httplib.HTTPSConnection(parsed_url.netloc)
-        conn.request("POST",
-                     parsed_url.netloc + \
-                         parsed_url.path + \
-                         '?' + parsed_url.query,
-                     data, headers)
-        response = conn.getresponse()
-        print response.status, response.reason, response.read()
+
+        conn = httplib.HTTPS(parsed_url.netloc)
+
+        conn.putrequest("PUT", parsed_url.path + '?' + parsed_url.query)
+        conn.putheader("Content-Type", "text/xml")
+        conn.putheader("Content-Length", str(len(xmlheader+data)))
+        conn.endheaders()
+
+        conn.send(xmlheader+data)
+
+        errcode, errmsg, headers = conn.getreply()
+
+        if errcode != 200:
+            print '%s, %s, %s' % (errcode, errmsg, headers)
+
         conn.close()
 
     def get_xml(self, json_data, pretty_print=False):
