@@ -6,6 +6,7 @@ API for parature (http://www.parature.com/)
 Example usage:
 
     >> from parature import Parature
+    >>
     >> class YourParatureClass(Parature):
     >>     def __init__(self):
     >>         parature_connection = {
