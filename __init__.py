@@ -93,4 +93,3 @@ class Parature(object):
             return etree.tostring(
                     self._js.ToXML(data=json_data))
 
-
