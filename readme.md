@@ -1,7 +1,7 @@
 Python Parature API
 ===================
 
-API for parature (http://www.parature.com/)
+API for [Parature](http://www.parature.com/ "Parature")
 
 Example usage:
 
