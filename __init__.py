@@ -38,8 +38,7 @@ class Parature(object):
         name = ticket_data['Ticket']['@id']
         url = self._create_url('Ticket', name,
                 use_json=False)
-        self.put_item(url,
-                self.get_xml(ticket_data, pretty_print=True))
+        self.put_item(url, ticket_data)
 
     def GetCustomer(self, name=None, page=None):
         url = self._create_url('Customer', name)
@@ -51,19 +50,17 @@ class Parature(object):
         name = customer_data['Customer']['@id']
         url = self._create_url('Customer', name,
                 use_json=False)
-        self.put_item(url,
-                self.get_xml(customer_data, pretty_print=True))
+        self.put_item(url, customer_data)
 
     @staticmethod
     def get_item(url):
         js = JsonXML(url)
         return js.data
 
-    @staticmethod
-    def put_item(url, data):
+    def put_item(self, url, data):
         xmlheader = "<?xml version=\"1.0\" ?>\n"
-        url = url.replace('&_output_=json', '')
         parsed_url = urlparse(url)
+        data = self.get_xml(data, pretty_print=True)
 
         conn = httplib.HTTPS(parsed_url.netloc)
 
