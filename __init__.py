@@ -70,7 +70,7 @@ class Parature(object):
             else:
                 customer_list = self.GetCustomer(page=cur_page)
             for customer in customer_list['Entities']:
-                yield customer
+                yield customer['Customer']
 
     def PutCustomer(self, customer_data=None):
         name = customer_data['Customer']['@id']
