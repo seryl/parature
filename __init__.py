@@ -53,7 +53,7 @@ class Parature(object):
         total_tickets = int(initial_list['Entities']['@total'])
         total_page_count = int(ceil((total_tickets + 0.0)/page_size))
         for cur_page in xrange(1, total_page_count+1):
-            if cur_page=1:
+            if cur_page==1:
                 ticket_list = initial_list
             else:
                 ticket_list = self.GetTicket(
