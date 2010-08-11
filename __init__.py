@@ -48,11 +48,27 @@ class Parature(object):
                 use_json=False)
         self.put_item(url, ticket_data)
 
-    def GetCustomer(self, name=None, page=None):
+    def GetCustomer(self, name=None, page=None, page_size=None):
         url = self._create_url('Customer', name)
+        if name:
+            return self.get_item(url)
+        if page_size:
+            url += '&_pageSize_=%s' % page_size
         if page:
             url += '&_startPage_=%s' % page
-        return self.get_item(url)
+            return self.get_item(url)
+        else:
+            initial_list = self.get_item(url)
+            page_size = int(initial_list['Entities']['@page-size'])
+            total_customers = int(initial_list['Entities']['@total'])
+            total_page_count = int(ceil((total_customers + 0.0)/page_size))
+            for cur_page in xrange(1, total_page_count+1):
+                if cur_page == 1:
+                    customer_list = initial_list
+                else:
+                    customer_list = self.GetCustomer(page=cur_page)
+                for customer in customer_list['Entities']:
+                    yield customer
 
     def PutCustomer(self, customer_data=None):
         name = customer_data['Customer']['@id']
