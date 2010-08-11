@@ -56,7 +56,7 @@ class Parature(object):
             url += '&_pageSize_=%s' % page_size
         if page:
             url += '&_startPage_=%s' % page
-            return self.get_item(url)
+        return self.get_item(url)
 
     def GetCustomerList(self, page_size=None):
         initial_list = self.GetCustomer(page_size=page_size)
