@@ -37,11 +37,30 @@ class Parature(object):
             url += '&_output_=json'
         return url
 
-    def GetTicket(self, name=None, page=None):
+    def GetTicket(self, name=None, page=None, page_size=None):
         url = self._create_url('Ticket', name)
+        if name:
+            return self.get_item(url)
+        if page_size:
+            url += '&_pageSize_=%s' % page_size
         if page:
             url += '&_startPage_=%s' % page
         return self.get_item(url)
+
+    def GetTicketList(self, page_size=None):
+        initial_list = self.GetTicket(page_size=page_size)
+        page_size = int(initial_list['Entities']['@page-size'])
+        total_tickets = int(initial_list['Entities']['@total'])
+        total_page_count = int(ceil((total_tickets + 0.0)/page_size))
+        for cur_page in xrange(1, total_page_count+1):
+            if cur_page=1:
+                ticket_list = initial_list
+            else:
+                ticket_list = self.GetTicket(
+                        page=cur_page, page_size=page_size)
+            for k,v in ticket_list['Entities'].items():
+                if k == 'Ticket':
+                    yield v
 
     def PutTicket(self, ticket_data=None):
         name = ticket_data['Ticket']['@id']
@@ -68,7 +87,8 @@ class Parature(object):
             if cur_page == 1:
                 customer_list = initial_list
             else:
-                customer_list = self.GetCustomer(page=cur_page)
+                customer_list = self.GetCustomer(
+                        page=cur_page, page_size=page_size)
             for k,v in customer_list['Entities'].items():
                 if k == 'Customer':
                     yield v
