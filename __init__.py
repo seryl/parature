@@ -61,7 +61,7 @@ class Parature(object):
             for k,v in ticket_list['Entities'].items():
                 if k == 'Ticket':
                     for ticket in v:
-                        yield ticket
+                        yield {'Ticket': ticket}
 
     def PutTicket(self, ticket_data=None):
         name = ticket_data['Ticket']['@id']
@@ -93,7 +93,7 @@ class Parature(object):
             for k,v in customer_list['Entities'].items():
                 if k == 'Customer':
                     for customer in v:
-                        yield customer
+                        yield {'Customer': customer}
 
     def PutCustomer(self, customer_data=None):
         name = customer_data['Customer']['@id']
