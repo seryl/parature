@@ -7,6 +7,7 @@ from decorator import decorator
 from jsonxml import JsonXML
 from lxml import etree
 from time import sleep
+from math import ceil
 
 from urllib import urlopen, urlencode
 from urlparse import urlparse
