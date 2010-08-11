@@ -19,15 +19,22 @@ Example usage:
     
         def test(self):
             # GET Examples
-            customerlist = self.GetCustomer()
-            print customerlist
+            
+            # Get all of the customers (Generator)
+            customerlist = self.GetCustomerList()
+            for customer in customerlist:
+                print customer
     
+            # Get a single customer (By id)
             customer = self.GetCustomer(1)
             print customer
+   
+            # Get all of the tickets (Generator) 
+            ticketlist = self.GetTicketList()
+            for ticket in ticketlist:
+                print ticket
     
-            ticketlist = self.GetTicket()
-            print ticketlist
-    
+            # Get a single ticket (By id)
             ticket = self.GetTicket(1)
             print ticket
     
