@@ -92,7 +92,7 @@ class Parature(object):
                         page=cur_page, page_size=page_size)
             for k,v in customer_list['Entities'].items():
                 if k == 'Customer':
-                    for customer in k:
+                    for customer in v:
                         yield customer
 
     def PutCustomer(self, customer_data=None):
