@@ -69,8 +69,9 @@ class Parature(object):
                 customer_list = initial_list
             else:
                 customer_list = self.GetCustomer(page=cur_page)
-            for customer in customer_list['Entities']:
-                yield customer['Customer']
+            for k,v in customer_list['Entities'].items():
+                if k == 'Customer':
+                    yield v
 
     def PutCustomer(self, customer_data=None):
         name = customer_data['Customer']['@id']
