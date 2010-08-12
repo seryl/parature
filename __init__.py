@@ -104,8 +104,12 @@ class Parature(object):
     @staticmethod
     @throttle_requests
     def get_item(url):
-        js = JsonXML(url)
-        return js.data
+        try:
+            js = JsonXML(url)
+            return js.data
+        except Exception as e:
+            print e
+            return None
 
     @throttle_requests
     def put_item(self, url, data):
