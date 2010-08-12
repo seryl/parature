@@ -12,17 +12,23 @@ class JsonXML(object):
     def __init__(self, url=None, use_json=True):
         if url:
             if use_json:
-                self.data = str(unicode(
-                    urlopen(url).read(),
-                    errors='ignore'))
-                self.data = json.loads(self.data)
-                if self.data.has_key('?xml'):
-                    del(self.data['?xml'])
+                try:
+                    self.data = str(unicode(
+                        urlopen(url).read(),
+                        errors='ignore'))
+                    self.data = json.loads(self.data)
+                    if self.data.has_key('?xml'):
+                        del(self.data['?xml'])
+                except Exception as e:
+                    self.data = None
+                    print e
 
     def ToXML(self, data=None):
         et = None
         if not data:
             data = self.data
+        if not data:
+            return None
         for k,v in data.iteritems():
             et = etree.Element(k)
             et = self.__build_xml_tree__(v, et)
@@ -30,6 +36,9 @@ class JsonXML(object):
 
     @staticmethod
     def __build_xml_tree__(json_data, parent):
+        if not json_data:
+            return None
+
         if isinstance(json_data, unicode):
             parent.text = json_data
             return parent
