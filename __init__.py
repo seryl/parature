@@ -58,6 +58,8 @@ class Parature(object):
             else:
                 ticket_list = self.GetTicket(
                         page=cur_page, page_size=page_size)
+            if not ticket_list:
+                yield None
             for k,v in ticket_list['Entities'].items():
                 if k == 'Ticket':
                     for ticket in v:
@@ -90,6 +92,8 @@ class Parature(object):
             else:
                 customer_list = self.GetCustomer(
                         page=cur_page, page_size=page_size)
+            if not customer_list:
+                yield None
             for k,v in customer_list['Entities'].items():
                 if k == 'Customer':
                     for customer in v:
