@@ -37,7 +37,7 @@ class Parature(object):
             url += '&_output_=json'
         return url
 
-    def GetTicket(self, name=None, page=None, page_size=None):
+    def GetTicket(self, name=None, page=None, page_size=None, search=None):
         url = self._create_url('Ticket', name)
         if name:
             return self.get_item(url)
@@ -45,9 +45,11 @@ class Parature(object):
             url += '&_pageSize_=%s' % page_size
         if page:
             url += '&_startPage_=%s' % page
+        if search:
+            url += '&_' + '_'.join(search) + '_'
         return self.get_item(url)
 
-    def GetTicketList(self, page_size=None):
+    def GetTicketList(self, page_size=None, search_type=None):
         initial_list = self.GetTicket(page_size=page_size)
         page_size = int(initial_list['Entities']['@page-size'])
         total_tickets = int(initial_list['Entities']['@total'])
@@ -56,7 +58,12 @@ class Parature(object):
             if cur_page==1:
                 ticket_list = initial_list
             else:
-                ticket_list = self.GetTicket(
+                if search_type:
+                    ticket_list = self.GetTicket(
+                        page=cur_page, page_size=page_size,
+                        search=search_type)
+                else:
+                    ticket_list = self.GetTicket(
                         page=cur_page, page_size=page_size)
             try:
                 for k,v in ticket_list['Entities'].items():
