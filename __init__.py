@@ -47,6 +47,7 @@ class Parature(object):
             url += '&_startPage_=%s' % page
         if search:
             url += '&_' + '_'.join(search) + '_'
+        print url
         return self.get_item(url)
 
     def GetTicketList(self, page_size=None, search_type=None):
