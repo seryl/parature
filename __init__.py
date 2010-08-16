@@ -46,7 +46,7 @@ class Parature(object):
         if page:
             url += '&_startPage_=%s' % page
         if search:
-            url += '&_' + '_'.join(search) + '_'
+            url += '&_' + '_'.join(search.split()) + '_'
         print url
         return self.get_item(url)
 
