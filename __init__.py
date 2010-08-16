@@ -58,7 +58,7 @@ class Parature(object):
             if cur_page==1:
                 ticket_list = initial_list
             else:
-                if search_type:
+                if created:
                     ticket_list = self.GetTicket(
                         page=cur_page, page_size=page_size,
                         created=created)
