@@ -95,6 +95,8 @@ class Parature(object):
                         page=cur_page, page_size=page_size)
             if not customer_list:
                 yield None
+            if not customer_list['Entities']:
+                yield None
             for k,v in customer_list['Entities'].items():
                 if k == 'Customer':
                     for customer in v:
