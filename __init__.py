@@ -58,12 +58,13 @@ class Parature(object):
             else:
                 ticket_list = self.GetTicket(
                         page=cur_page, page_size=page_size)
-            if not ticket_list:
+            try:
+                for k,v in ticket_list['Entities'].items():
+                    if k == 'Ticket':
+                        for ticket in v:
+                            yield {'Ticket': ticket}
+            except:
                 yield None
-            for k,v in ticket_list['Entities'].items():
-                if k == 'Ticket':
-                    for ticket in v:
-                        yield {'Ticket': ticket}
 
     def PutTicket(self, ticket_data=None):
         name = ticket_data['Ticket']['@id']
