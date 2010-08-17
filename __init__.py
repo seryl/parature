@@ -51,6 +51,8 @@ class Parature(object):
 
     def GetTicketList(self, page_size=None, created=None):
         initial_list = self.GetTicket(page_size=page_size)
+        if not initial_list:
+            yield None
         page_size = int(initial_list['Entities']['@page-size'])
         total_tickets = int(initial_list['Entities']['@total'])
         total_page_count = int(ceil((total_tickets + 0.0)/page_size))
