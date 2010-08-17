@@ -72,6 +72,7 @@ class Parature(object):
                             yield {'Ticket': ticket}
             except:
                 yield None
+            yield None
 
     def PutTicket(self, ticket_data=None):
         name = ticket_data['Ticket']['@id']
